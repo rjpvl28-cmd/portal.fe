@@ -10,14 +10,7 @@
             v-for="article in articles"
             :key="article.id"
         >
-            <a href="#" class="card text-decoration-none">
-                <img :src="article.image" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{ article.title }}</h5>
-                    
-                </div>
-            </a>
-        
+            <ArticleCard :article="article"/>    
         </div>
     </div>
     MainPage
@@ -25,30 +18,30 @@
 </template>
 
 <script>
+import axios from 'axios';
+import ArticleCard from '@/components/ArticleCard.vue';
 export default {
+    components: {
+        ArticleCard
+    },
     data() {
         return {
-            articles: [
-                {
-                    id: 1,
-                    title: 'новость номер 1',
-                    image: "https://avatarko.ru/img/kartinka/1/Crazy_Frog.jpg",
-                },
-                {
-                    id: 2,
-                    title: 'новость номер 2',
-                    image: "https://avatarko.ru/img/kartinka/1/multfilm_pingviny.jpg",
-                }
-            ]
+            articles: []
+        }
+    },
+    mounted() {
+        this.loadArticles();    
+    },
+    methods: {
+        async loadArticles() {
+            const response = await axios.get('http://portal.be/api/articles');
+            this.articles = response.data;
         }
     }
 
 }
 </script>
 <style scoped>
-    .card img {
-        max-height: 150px;
-        object-fit: cover;
-    }
+
 
 </style>
